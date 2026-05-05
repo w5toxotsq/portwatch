@@ -1,17 +1,17 @@
-// Package baseline manages a user-approved set of open ports that serves as
-// the reference point for anomaly detection.
+// Package baseline provides functionality for capturing and comparing
+// a known-good set of open ports against the current state.
 //
-// A baseline is created by capturing the current port state and saving it to
-// disk. Subsequent scans are compared against the baseline to surface
-// unexpected new ports (ports present in the scan but absent from the
-// baseline) and missing ports (ports present in the baseline but no longer
-// open).
+// A baseline represents an intentional snapshot of expected open ports.
+// It can be saved to disk and later loaded to compare against a live scan,
+// highlighting ports that have appeared or disappeared unexpectedly.
 //
 // Usage:
 //
 //	b := baseline.New(ports)
-//	_ = baseline.Save(b, "/var/lib/portwatch/baseline.json")
+//	if err := b.Save(path); err != nil { ... }
 //
-//	loaded, err := baseline.Load("/var/lib/portwatch/baseline.json")
-//	unexpected, missing := baseline.Compare(loaded, currentPorts)
+//	loaded, err := baseline.Load(path)
+//	if err != nil { ... }
+//
+//	unexpected, missing := loaded.Compare(currentPorts)
 package baseline
